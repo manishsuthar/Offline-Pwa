@@ -1,0 +1,21 @@
+{
+  "name": "Offline PWA",
+  "short_name": "OFFLINE PWA",
+  "icons": [{
+    "src": "2.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+    "src": "2.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }],
+
+    
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2c485f",
+  "theme_color": "#2196f3"
+}

@@ -1,0 +1,166 @@
+<html>
+    <head>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!-- <script>
+      var openFile = function(event) {
+        var input = event.target;
+
+        var reader = new FileReader();
+        reader.onload = function(){
+          var text = reader.result;
+          var node = document.getElementById('output');
+          node.innerText = text;
+          console.log(reader.result.substring(0, 200));
+        };
+        reader.readAsText(input.files[0]);
+      };
+    </script> -->
+    <script>
+    function processFiles(files) {
+            var file = files[0];
+              
+
+            var textParsed = [];
+
+            function onReadAsText(e) {
+                var output = document.getElementById("fileOutput");
+                output.textContent = output.textContent + e.target.result;
+
+                var text = e.target.result;
+                var lines = text.split("\n");
+
+                for (var i= 0; i < lines.length; i++) {      
+                    textParsed[i] = lines[i];
+                }
+
+                var testsPerformed = null;
+                var suggestions = [];
+                var suggestion = null;
+                var auxSug = null;
+                for (var j = 0; j < lines.length; j++) {
+                    if (textParsed[j].includes("tests_executed")){
+                        testsPerformed = textParsed[j];
+                    }
+                    if (textParsed[j].includes("suggestion[]")) {
+                        suggestion = textParsed[j];
+                        suggestions.push(suggestion);
+                    }
+                }
+
+                if (typeof(Storage) !== "undefined" && textParsed.length >= 1) {
+                //Store
+                localStorage.setItem('storedText', textParsed);
+                localStorage.setItem('tests', testsPerformed);
+                localStorage.setItem('suggestions', suggestions);
+                } 
+            };
+
+            for (var i = 0; i < files.length; i++){
+                var reader = new FileReader();
+                reader.onload = onReadAsText;
+                reader.readAsText(files[i]);
+                console.log(files[i].size+"Bytes");
+            }
+
+
+        }
+</script>
+    </head>
+    <body>
+    <!-- <input type='file' accept='text/plain' onchange='openFile(event)'><br>
+
+    <div id='output'>
+    ...
+    </div> -->
+    <input id="fileInput" placeholder=":input" type="file" size="50" onchange="processFiles(this.files)" multiple>
+    <div id="fileOutput"></div>
+
+    <!-- <script>
+        function imageSize(id)
+        {
+            var object=document.getElementById(id);
+            var width=object.width;
+            var height=object.height;
+            alert(width+' '+height);
+        }
+    </script>
+
+
+<img src='http://forums.devshed.com/image.php?u=156031&dateline=1130029497' id='image'/>
+
+<input type='button' onclick="imageSize('image')" value='Click me to find the width and height of the image'/> -->
+------------------------------------------------------------------------------------------------------------------
+<hr>
+<script>
+
+window.picUpload = function(frmData) {
+  console.log("picUpload ran: " + frmData);
+
+var allObjtProperties = '';
+for (objProprty in frmData) {
+    console.log(objProprty + " : " + frmData[objProprty]);
+    allObjtProperties = allObjtProperties + "<span>" + objProprty + ": " + frmData[objProprty] + ", </span>";
+};
+
+document.getElementById('allImgProperties').innerHTML = allObjtProperties;
+
+var cnvs=document.getElementById("cnvsForFormat");
+console.log("cnvs: " + cnvs);
+var ctx=cnvs.getContext("2d");
+
+var img = new Image;
+img.src = URL.createObjectURL(frmData);
+
+console.log('img: ' + img);
+
+img.onload = function() {
+  var picWidth = this.width;
+  var picHeight = this.height;
+  console.log("Pic Hight : = " + picHeight);
+  console.log("Pic width : = " + picWidth);
+  var wdthHghtRatio = picHeight/picWidth;
+  console.log('wdthHghtRatio: ' + wdthHghtRatio);
+  
+  if (Number(picWidth) > 400) {
+    var newHeight = Math.round(Number(400) * wdthHghtRatio);
+  } else {
+    return false;
+  };
+
+    document.getElementById('cnvsForFormat').height = newHeight;
+    console.log('width: 400  h: ' + newHeight);
+    //You must change the width and height settings in order to decrease the image size, but
+    //it needs to be proportional to the original dimensions.
+    console.log('This is BEFORE the DRAW IMAGE');
+    ctx.drawImage(img,0,0, 400, newHeight);
+
+    console.log('THIS IS AFTER THE DRAW IMAGE!');
+
+    //Even if original image is jpeg, getting data out of the canvas will default to png if not specified
+    var canvasToDtaUrl = cnvs.toDataURL("image/jpeg");
+    //The type and size of the image in this new IMG tag will be JPEG, and possibly much smaller in size
+    document.getElementById('imgTwoForJPG').innerHTML = "<img src='" + canvasToDtaUrl + "'>";
+};
+};
+
+</script>
+
+
+<form class='frmUpload'>
+  <input name="picOneUpload" type="file" accept="image/*" onchange="picUpload(this.files[0])" >
+</form>
+
+<canvas id="cnvsForFormat" width="400" height="266" style="border:1px solid #c3c3c3"></canvas>
+<div id='allImgProperties' style="display:inline"></div>
+
+<div id='imgTwoForJPG'></div>
+
+
+
+    </body>
+     <script src="./js/app.js"></script>
+    <script src="./js/toast.js"></script>
+    <script src="./js/offline.js"></script>
+    <script src="./js/menu.js"></script>
+    
+    </html>
